@@ -6,6 +6,7 @@ import com.mydata.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
@@ -21,5 +22,11 @@ public class ActivityServiceImpl implements ActivityService {
             flag=false;
         }
         return flag;
+    }
+
+    @Override
+    public List<Activity> pageList(Activity activity) {
+        List<Activity> list=activityDao.pageList(activity);
+        return list;
     }
 }

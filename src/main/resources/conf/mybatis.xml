@@ -13,6 +13,11 @@
         <package name="com.mydata.crm.settings.domain"/>
         <package name="com.mydata.crm.workbench.domain"/>
     </typeAliases>
+    <!--配置插件-->
+    <plugins>
+        <!--分页插件-->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
     <!--sql mapper（sql映射文件）的位置-->
     <mappers>
         <!--

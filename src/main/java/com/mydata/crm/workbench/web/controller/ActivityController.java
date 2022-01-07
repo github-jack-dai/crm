@@ -1,5 +1,6 @@
 package com.mydata.crm.workbench.web.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.mydata.crm.settings.domain.User;
 import com.mydata.crm.settings.service.UserService;
 import com.mydata.crm.utils.DateTimeUtil;
@@ -48,5 +49,15 @@ public class ActivityController {
         map.put("success",flag);
         return map;
     }
-
+    @RequestMapping(value = "/pageList.do",method = RequestMethod.GET)
+    @ResponseBody
+    public List<Activity> pageList(Activity activity,String pageNo,String pageSize){
+        System.out.println("进入到查询市场活动信息列表的操作（结合条件查询+分页查询）");
+        PageHelper.startPage(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        List<Activity> list=activityService.pageList(activity);
+        for(Activity ac:list){
+            System.out.println(ac);
+        }
+        return list;
+    }
 }
