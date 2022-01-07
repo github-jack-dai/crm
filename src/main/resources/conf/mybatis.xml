@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--日志-->
+    <!--<settings>-->
+        <!--<setting name="logImpl" value="STDOUT_LOGGING"/>-->
+    <!--</settings>-->
+    <!--设置别名-->
+    <typeAliases>
+        <!--name：实体类所在包名的指定（不是实体类也可以）-->
+        <package name="com.mydata.crm.settings.domain"/>
+        <package name="com.mydata.crm.workbench.domain"/>
+    </typeAliases>
+    <!--sql mapper（sql映射文件）的位置-->
+    <mappers>
+        <!--
+        <mapper resource="com/mydata/dao/StudentDao.xml"/>
+        使用package时候，数据库操作文件一定要和dao文件名字一样，不然web下面会出错
+        name：是包名，表示这个包中mapper.xml对象能一次加载
+        使用package的要求：
+            1、mapper文件名称和dao接口名必须完全一样，包括大小写
+            2、mapper文件和dao接口必须在同一目录
+        -->
+        <package name="com.mydata.crm.settings.dao"/>
+        <package name="com.mydata.crm.workbench.dao"/>
+    </mappers>
+</configuration>
