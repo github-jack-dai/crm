@@ -1,5 +1,7 @@
 package com.mydata.crm.workbench.service.impl;
 
+import com.mydata.crm.settings.dao.UserDao;
+import com.mydata.crm.settings.domain.User;
 import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.dao.ActivityDao;
 import com.mydata.crm.workbench.dao.ActivityRemarkDao;
@@ -8,10 +10,14 @@ import com.mydata.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ActivityServiceImpl implements ActivityService {
+    @Resource
+    private UserDao userDao;
 
     @Resource
     private ActivityDao activityDao;
@@ -56,5 +62,25 @@ public class ActivityServiceImpl implements ActivityService {
             flag=false;
         }
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getUserListAndActivity(String id) {
+        List<User> userList = userDao.getUserList();
+        Activity activity=activityDao.getById(id);
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("uList",userList );
+        map.put("a",activity);
+        return map;
+    }
+
+    @Override
+    public boolean update(Activity activity) {
+        int count=activityDao.update(activity);
+        boolean flag=true;
+        if (count!=1){
+            flag=false;
+        }
+        return flag;
     }
 }

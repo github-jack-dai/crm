@@ -41,6 +41,7 @@ public class ActivityController {
         //这传统servlet的方法，springmvc可以直接用对象接收
        /* String startDate = request.getParameter("startDate");
         System.out.println(startDate);*/
+       //uuid作为主键，外加记录创建人和创建时间
         activity.setId(UUIDUtil.getUUID());
         activity.setCreateTime(DateTimeUtil.getSysTime());
         //通过request对象获取session里的用户，在强转获取用户名字
@@ -69,6 +70,23 @@ public class ActivityController {
         System.out.println("id==="+id.length);
         boolean flag=activityService.delete(id);
         System.out.println(flag);
+        return flag;
+    }
+    @RequestMapping(value = "/getUserListAndActivity.do",method =RequestMethod.GET )
+    @ResponseBody
+    public Map<String,Object> getUserListAndActivity(String id){
+        Map<String,Object> map=activityService.getUserListAndActivity(id);
+        return map;
+    }
+    @RequestMapping(value = "/update.do")
+    @ResponseBody//这个一定要开始的时候就加上，不然老忘记
+    public boolean update(Activity activity,HttpServletRequest request){
+        //修改人和修改时间
+        activity.setEditTime(DateTimeUtil.getSysTime());
+        //通过request对象获取session里的用户，在强转获取用户名字
+        activity.setEditBy(((User)request.getSession().getAttribute("user")).getName());
+        boolean flag=activityService.update(activity);
+        System.out.println("flag====="+flag);
         return flag;
     }
 }

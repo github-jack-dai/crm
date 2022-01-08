@@ -12,4 +12,8 @@ public interface ActivityDao {
     int getTotalByCondition(Activity activity);
 
     int delete(String[] ids);
+
+    Activity getById(String id);
+
+    int update(Activity activity);
 }
