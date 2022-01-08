@@ -95,7 +95,7 @@ request.getContextPath() + "/";
                 success:function (resp) {
 					var html="";
                     alert(111);
-                    $.each(resp,function (i,n) {
+                    $.each(resp.dataList,function (i,n) {
 						html += '<tr class="active">';
 						html+='<td><input type="checkbox" value="'+n.id+'"/></td>';
 						html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';

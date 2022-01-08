@@ -1,5 +1,6 @@
 package com.mydata.crm.workbench.service.impl;
 
+import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.dao.ActivityDao;
 import com.mydata.crm.workbench.domain.Activity;
 import com.mydata.crm.workbench.service.ActivityService;
@@ -25,8 +26,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<Activity> pageList(Activity activity) {
-        List<Activity> list=activityDao.pageList(activity);
-        return list;
+    public PaginationVO<Activity> pageList(Activity activity) {
+        List<Activity> list=activityDao.getActivityListByCondition(activity);
+        int total=activityDao.getTotalByCondition(activity);
+        PaginationVO<Activity> vo=new PaginationVO<Activity>();
+        vo.setTotal(total);
+        vo.setDataList(list);
+
+        return vo;
     }
 }

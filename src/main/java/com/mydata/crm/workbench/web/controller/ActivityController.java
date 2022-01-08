@@ -5,6 +5,7 @@ import com.mydata.crm.settings.domain.User;
 import com.mydata.crm.settings.service.UserService;
 import com.mydata.crm.utils.DateTimeUtil;
 import com.mydata.crm.utils.UUIDUtil;
+import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.domain.Activity;
 import com.mydata.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Controller;
@@ -51,13 +52,11 @@ public class ActivityController {
     }
     @RequestMapping(value = "/pageList.do",method = RequestMethod.GET)
     @ResponseBody
-    public List<Activity> pageList(Activity activity,String pageNo,String pageSize){
+    public PaginationVO<Activity> pageList(Activity activity, String pageNo, String pageSize){
         System.out.println("进入到查询市场活动信息列表的操作（结合条件查询+分页查询）");
+        //分页查询的第一个参数表示略过的条数，第二个参数表示每页查询多少条数据
         PageHelper.startPage(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
-        List<Activity> list=activityService.pageList(activity);
-        for(Activity ac:list){
-            System.out.println(ac);
-        }
-        return list;
+        PaginationVO<Activity> vo=activityService.pageList(activity);
+        return vo;
     }
 }

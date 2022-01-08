@@ -7,5 +7,7 @@ import java.util.List;
 public interface ActivityDao {
     int save(Activity activity);
 
-    List<Activity> pageList(Activity activity);
+    List<Activity> getActivityListByCondition(Activity activity);
+
+    int getTotalByCondition(Activity activity);
 }
