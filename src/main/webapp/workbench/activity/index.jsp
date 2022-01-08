@@ -72,7 +72,7 @@ request.getContextPath() + "/";
                         //    关闭模板窗口
                         $("#activityAddForm")[0].reset()
                         $("#createActivityModal").modal("hide");
-                        pageList(1,2);
+                        pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
                     } else {
                         alert("添加失败")
                     }
@@ -109,7 +109,7 @@ request.getContextPath() + "/";
                         dataType:"json",
                         success:function (data) {
                             if (data){
-                                pageList(1,2);
+                                pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
                             } else{
                                 alert("删除市场活动失败");
                             }
@@ -126,7 +126,7 @@ request.getContextPath() + "/";
             $("#hidden-owner").val($.trim($("#search-owner").val()));
             $("#hidden-startDate").val($.trim($("#search-startDate").val()));
             $("#hidden-endDate").val($.trim($("#search-endDate").val()));
-            pageList(1,2);
+            pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
         })
         //分页的方法，不用自己写，有写好了的
 		function pageList(pageNo,pageSize) {
@@ -153,7 +153,7 @@ request.getContextPath() + "/";
                     $.each(data.dataList,function (i,n) {
 						html += '<tr class="active">';
 						html+='<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
-						html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.jsp\';">'+n.name+'</a></td>';
+						html+='<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/activity/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
 						html+='<td>'+n.owner+'</td>';
 						html+='<td>'+n.startDate+'</td>';
 						html+='<td>'+n.endDate+'</td>';
@@ -235,11 +235,17 @@ request.getContextPath() + "/";
                 type:"post",
                 dataType:"json",
                 success:function (data) {
-                    alert(data);
                     if (data){
                         //修改成功后局部刷新市场活动列表信息
                         //    关闭模板窗口
-                        pageList(1,2);
+                        //pageList(1,2);
+						/**
+                         bootstrap提供好的插件，拿来直接用就行，
+						 第一个参数表示操作后停留在当前页
+						 第二个参数表示维持操作后设置好的每页展出数
+                         */
+						 pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+                         ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
                         //$("#activityAddForm")[0].reset()
                         $("#editActivityModal").modal("hide");
                     } else {

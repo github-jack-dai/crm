@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -88,5 +89,15 @@ public class ActivityController {
         boolean flag=activityService.update(activity);
         System.out.println("flag====="+flag);
         return flag;
+    }
+    @RequestMapping(value = "/detail.do",method =RequestMethod.GET)
+    @ResponseBody//这个一定要开始的时候就加上，不然老忘记
+    public ModelAndView detail(String id){
+        Activity activity=activityService.detail(id);
+        System.out.println(activity);
+        ModelAndView mv=new ModelAndView();
+        mv.addObject("a",activity);
+        mv.setViewName("workbench/activity/detail");
+        return mv;
     }
 }

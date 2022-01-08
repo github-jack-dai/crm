@@ -13,7 +13,7 @@
     <!--配置视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!--prefix表示文件开始的目录，suffix表示文件默认后缀-->
-        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="prefix" value="/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
     <!--
