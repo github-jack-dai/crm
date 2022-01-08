@@ -64,27 +64,30 @@ request.getContextPath() + "/";
 			if ($xz.length==0){
 			    alert("请选择需要删除的记录");
 			}else {
-			    var param="";
-			    for (var i=0;i<$xz.length;i++){
-					param+="id="+$($xz[i]).val();
-					if (i<$xz.length-1){
-                        param+="&";
-					}
-                }
-				//alert(param);
-                $.ajax({
-                    url:"workbench/activity/delete.do",
-                    data:param,
-                    type:"post",
-                    dataType:"json",
-                    success:function (data) {
-                        if (data){
-                            pageList(1,2);
-						} else{
-                            alert("删除市场活动失败");
-						}
+			    //给客户友好的提示，防止误操作
+			    if(confirm("确定删除所选中的记录吗？")){
+                    var param="";
+                    for (var i=0;i<$xz.length;i++){
+                        param+="id="+$($xz[i]).val();
+                        if (i<$xz.length-1){
+                            param+="&";
+                        }
                     }
-                })
+                    //alert(param);
+                    $.ajax({
+                        url:"workbench/activity/delete.do",
+                        data:param,
+                        type:"post",
+                        dataType:"json",
+                        success:function (data) {
+                            if (data){
+                                pageList(1,2);
+                            } else{
+                                alert("删除市场活动失败");
+                            }
+                        }
+                    })
+				}
 			}
         })
 		//保存市场活动的创建
