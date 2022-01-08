@@ -16,7 +16,7 @@ $.ajax({
     data:{},
     type:"",
     dataType:"json",
-    success:function (resp) {
+    success:function (data) {
     }
 })
 </body>

@@ -59,4 +59,16 @@ public class ActivityController {
         PaginationVO<Activity> vo=activityService.pageList(activity);
         return vo;
     }
+
+    @RequestMapping(value = "/delete.do")
+    @ResponseBody
+    public boolean delete(HttpServletRequest request,String id[]){
+        //传统servlet写法
+        /*String ids[] = request.getParameterValues("id");
+        System.out.println(ids.length);*/
+        System.out.println("id==="+id.length);
+        boolean flag=activityService.delete(id);
+        System.out.println(flag);
+        return flag;
+    }
 }
