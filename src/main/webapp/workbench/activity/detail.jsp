@@ -65,18 +65,31 @@ request.getContextPath() + "/";
         })*/
         showRemarkList();
         $("#saveRemarkBtn").click(function () {
-            var noteContent=$("#remark").val();
             $.ajax({
                 url:"workbench/activity/saveRemark.do",
                 data:{
-                    "noteContent":noteContent,
+                    "noteContent":$.trim($("#remark").val()),
                     "activityId":"${a.id}"
                 },
                 type:"post",
                 dataType:"json",
                 success:function (data) {
-                    if (data){
+                    if (data.success){
                         alert("添加成功");
+                        var html="";
+                        html+='<div id="'+data.ar.id+'" class="remarkDiv" style="height: 60px;">';
+                        html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+                        html+='<div style="position: relative; top: -40px; left: 40px;" >';
+                        html+='<h5>'+data.ar.noteContent+'</h5>';
+                        html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(data.ar.editFlag==0?data.ar.createTime:data.ar.editTime)+' 由'+(data.ar.editFlag==0?data.ar.createBy:data.ar.editBy)+'</small>';
+                        html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+                        html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html+='&nbsp;&nbsp;&nbsp;';
+                        html+='<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+data.ar.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html+='</div>';
+                        html+='</div>';
+                        html+='</div>';
+                        $("#remarkDiv").before(html);
                     } else {
                         alert("添加失败");
                     }
