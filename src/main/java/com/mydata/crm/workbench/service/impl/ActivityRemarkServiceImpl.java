@@ -45,4 +45,14 @@ public class ActivityRemarkServiceImpl implements ActivityRemarkService {
         map.put("ar",activityRemark);
         return map;
     }
+
+    @Override
+    public boolean updateRemark(ActivityRemark activityRemark) {
+        boolean flag=true;
+        int count=activityRemarkDao.updateRemark(activityRemark);
+        if (count!=1){
+            flag=false;
+        }
+        return flag;
+    }
 }

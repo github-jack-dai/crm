@@ -131,4 +131,16 @@ public class ActivityController {
         Map<String,Object> map=activityRemarkService.saveRemark(activityRemark);
         return map;
     }
+    @RequestMapping(value = "/updateRemark.do")
+    @ResponseBody//这个一定要开始的时候就加上，不然老忘记
+    public boolean updateRemark(String id,String noteContent,HttpServletRequest request){
+        ActivityRemark activityRemark=new ActivityRemark();
+        activityRemark.setId(id);
+        activityRemark.setEditFlag("1");
+        activityRemark.setNoteContent(noteContent);
+        activityRemark.setEditBy(((User)request.getSession().getAttribute("user")).getName());
+        activityRemark.setEditTime(DateTimeUtil.getSysTime());
+        boolean flag=activityRemarkService.updateRemark(activityRemark);
+        return flag;
+    }
 }
