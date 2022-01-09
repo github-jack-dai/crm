@@ -133,7 +133,7 @@ public class ActivityController {
     }
     @RequestMapping(value = "/updateRemark.do")
     @ResponseBody//这个一定要开始的时候就加上，不然老忘记
-    public boolean updateRemark(String id,String noteContent,HttpServletRequest request){
+    public Map<String,Object> updateRemark(String id,String noteContent,HttpServletRequest request){
         ActivityRemark activityRemark=new ActivityRemark();
         activityRemark.setId(id);
         activityRemark.setEditFlag("1");
@@ -141,6 +141,9 @@ public class ActivityController {
         activityRemark.setEditBy(((User)request.getSession().getAttribute("user")).getName());
         activityRemark.setEditTime(DateTimeUtil.getSysTime());
         boolean flag=activityRemarkService.updateRemark(activityRemark);
-        return flag;
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("success",flag);
+        map.put("ar",activityRemark);
+        return map;
     }
 }

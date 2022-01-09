@@ -81,7 +81,7 @@ request.getContextPath() + "/";
                         html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
                         html+='<div style="position: relative; top: -40px; left: 40px;" >';
                         html+='<h5 id="e'+data.ar.id+'">'+data.ar.noteContent+'</h5>';
-                        html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(data.ar.editFlag==0?data.ar.createTime:data.ar.editTime)+' 由'+(data.ar.editFlag==0?data.ar.createBy:data.ar.editBy)+'</small>';
+                        html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;" id="b'+data.ar.id+'"> '+(data.ar.editFlag==0?data.ar.createTime:data.ar.editTime)+' 由'+(data.ar.editFlag==0?data.ar.createBy:data.ar.editBy)+'</small>';
                         html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
                         html+='<a class="myHref" href="javascript:void(0);" onclick="editRemark(\''+data.ar.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
                         html+='&nbsp;&nbsp;&nbsp;';
@@ -98,18 +98,20 @@ request.getContextPath() + "/";
         })
         $("#updateRemarkBtn").click(function () {
             var id=$("#remarkId").val();
+            var noteContent=$("#noteContent").val();
             $.ajax({
                 url:"workbench/activity/updateRemark.do",
                 data:{
                     "id":id,
-                    "noteContent":$("#noteContent").val()
+                    "noteContent":$.trim(noteContent)
                 },
                 type:"post",
                 dataType:"json",
                 success:function (data) {
-                    if (data){
+                    if (data.success){
                         //文本框比较特殊，他的值都是用val来存取的
-                        $("#e"+id).html($("#noteContent").val());
+                        $("#e"+id).html(noteContent);
+                        $("#b"+id).html((data.ar.editFlag==0?data.ar.createTime:data.ar.editTime)+' 由'+(data.ar.editFlag==0?data.ar.createBy:data.ar.editBy));
                         $("#editRemarkModal").modal("hide");
                     } else {
                         alert("修改失败");
@@ -133,7 +135,7 @@ request.getContextPath() + "/";
                     html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
                     html+='<div style="position: relative; top: -40px; left: 40px;" >';
                     html+='<h5 id="e'+n.id+'">'+n.noteContent+'</h5>';
-                    html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
+                    html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;" id="b'+n.id+'"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
                     html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
                     html+='<a class="myHref" href="javascript:void(0);" onclick="editRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
                     html+='&nbsp;&nbsp;&nbsp;';
