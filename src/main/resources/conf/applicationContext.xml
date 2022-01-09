@@ -31,6 +31,7 @@
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <property name="basePackage" value="com.mydata.crm.workbench.dao"/>
     </bean>
+    <bean id="dicService" class="com.mydata.crm.settings.service.impl.DicServiceImpl"/>
     <!--声明service的注解@Service所在的包名位置-->
     <context:component-scan base-package="com.mydata.crm.settings.service"/>
     <context:component-scan base-package="com.mydata.crm.workbench.service"/>
