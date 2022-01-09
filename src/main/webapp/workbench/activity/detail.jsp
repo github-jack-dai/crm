@@ -53,24 +53,70 @@ request.getContextPath() + "/";
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
-		/*$("#editBtn").click(function () {
-            $.ajax({
-                url:"workbench/activity/getUserListAndActivity.do",
-                data:{"id":id},
-                type:"",
-                dataType:"json",
-                success:function (data) {
-                }
-            })
+        $("#remarkBody").on("mouseover",".remarkDiv",function(){
+            $(this).children("div").children("div").show();
+        })
+        $("#remarkBody").on("mouseout",".remarkDiv",function(){
+            $(this).children("div").children("div").hide();
+        })
+
+        /*$("#editBtn").click(function () {
+
         })*/
+        showRemarkList();
+
 	});
+    function showRemarkList() {
+        $.ajax({
+            url:"workbench/activity/getRemarkListByAid.do",
+            data:{"activityId":"${a.id}"},
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                var html="";
+                $.each(data,function (i,n) {
+                    <!-- 备注1 -->
+                    html+='<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
+                    html+='<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+                    html+='<div style="position: relative; top: -40px; left: 40px;" >';
+                    html+='<h5>'+n.noteContent+'</h5>';
+                    html+='<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> '+(n.editFlag==0?n.createTime:n.editTime)+' 由'+(n.editFlag==0?n.createBy:n.editBy)+'</small>';
+                    html+='<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+                    html+='<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                    html+='&nbsp;&nbsp;&nbsp;';
+                    html+='<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                    html+='</div>';
+                    html+='</div>';
+                    html+='</div>';
+                })
+                $("#remarkDiv").before(html);
+            }
+        })
+    }
+    function deleteRemark(id) {
+        $.ajax({
+            url:"workbench/activity/removeRemark.do",
+            data:{"id":id},
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                if(data){
+                    $("#"+id).remove();
+                   // showRemarkList();这方法行不通，会导致后面继续增加元素
+                }else{
+                    alert("删除失败！！！");
+                }
+            }
+        })
+    }
 	
 </script>
 
 </head>
 <body>
-	<%--把传过来的id用隐藏域保存起来--%>
-	<input type="hidden" value="${id}">
+    <%--把传过来的id用隐藏域保存起来--%>
+    <input type="hidden" id="remarkId" value="111"/>
+
 	<!-- 修改市场活动备注的模态窗口 -->
 	<div class="modal fade" id="editRemarkModal" role="dialog">
 		<%-- 备注的id --%>
@@ -226,12 +272,12 @@ request.getContextPath() + "/";
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
+	<div id="remarkBody" style="position: relative; top: 30px; left: 40px;">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>
 		
-		<!-- 备注1 -->
+		<%--<!-- 备注1 -->
 		<div class="remarkDiv" style="height: 60px;">
 			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
@@ -257,7 +303,7 @@ request.getContextPath() + "/";
 					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
 				</div>
 			</div>
-		</div>
+		</div>--%>
 		
 		<div id="remarkDiv" style="background-color: #E6E6E6; width: 870px; height: 90px;">
 			<form role="form" style="position: relative;top: 10px; left: 10px;">

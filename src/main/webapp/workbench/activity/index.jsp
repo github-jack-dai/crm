@@ -119,7 +119,7 @@ request.getContextPath() + "/";
 			}
         })
 
-        pageList(1,2);
+        pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
         //关于分页的一系列代码
         $("#searchBtn").click(function () {
             $("#hidden-name").val($.trim($("#search-name").val()));

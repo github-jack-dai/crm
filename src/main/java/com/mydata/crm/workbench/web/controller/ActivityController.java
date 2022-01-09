@@ -7,6 +7,8 @@ import com.mydata.crm.utils.DateTimeUtil;
 import com.mydata.crm.utils.UUIDUtil;
 import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.domain.Activity;
+import com.mydata.crm.workbench.domain.ActivityRemark;
+import com.mydata.crm.workbench.service.ActivityRemarkService;
 import com.mydata.crm.workbench.service.ActivityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,8 @@ public class ActivityController {
     private UserService userService;
     @Resource
     private ActivityService activityService;
+    @Resource
+    private ActivityRemarkService activityRemarkService;
 
     @RequestMapping(value="/getUserList.do",method = RequestMethod.GET)
     @ResponseBody
@@ -99,5 +103,18 @@ public class ActivityController {
         mv.addObject("a",activity);
         mv.setViewName("workbench/activity/detail");
         return mv;
+    }
+    @RequestMapping(value = "/getRemarkListByAid.do",method =RequestMethod.GET)
+    @ResponseBody//这个一定要开始的时候就加上，不然老忘记
+    public List<ActivityRemark> getRemarkListByAid(String activityId){
+        List<ActivityRemark> activityRemarkList=activityRemarkService.getRemarkListByAid(activityId);
+        System.out.println(activityRemarkList);
+        return activityRemarkList;
+    }
+    @RequestMapping(value = "/removeRemark.do")
+    @ResponseBody//这个一定要开始的时候就加上，不然老忘记
+    public boolean removeRemark(String id){
+        boolean flag=activityRemarkService.removeRemark(id);
+        return flag;
     }
 }
