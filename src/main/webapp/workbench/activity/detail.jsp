@@ -64,7 +64,25 @@ request.getContextPath() + "/";
 
         })*/
         showRemarkList();
-
+        $("#saveRemarkBtn").click(function () {
+            var noteContent=$("#remark").val();
+            $.ajax({
+                url:"workbench/activity/saveRemark.do",
+                data:{
+                    "noteContent":noteContent,
+                    "activityId":"${a.id}"
+                },
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    if (data){
+                        alert("添加成功");
+                    } else {
+                        alert("添加失败");
+                    }
+                }
+            })
+        })
 	});
     function showRemarkList() {
         $.ajax({
@@ -310,7 +328,7 @@ request.getContextPath() + "/";
 				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" id="saveRemarkBtn" class="btn btn-primary">保存</button>
 				</p>
 			</form>
 		</div>

@@ -117,4 +117,18 @@ public class ActivityController {
         boolean flag=activityRemarkService.removeRemark(id);
         return flag;
     }
+    @RequestMapping(value = "/saveRemark.do")
+    @ResponseBody//这个一定要开始的时候就加上，不然老忘记
+    public boolean saveRemark(String noteContent,HttpServletRequest request,String activityId){
+        System.out.println("开始执行描述的添加操作");
+        ActivityRemark activityRemark=new ActivityRemark();
+        activityRemark.setNoteContent(noteContent);
+        activityRemark.setCreateTime(DateTimeUtil.getSysTime());
+        activityRemark.setId(UUIDUtil.getUUID());
+        activityRemark.setCreateBy(((User)request.getSession().getAttribute("user")).getName());
+        activityRemark.setEditFlag("0");
+        activityRemark.setActivityId(activityId);
+        boolean flag=activityRemarkService.saveRemark(activityRemark);
+        return flag;
+    }
 }

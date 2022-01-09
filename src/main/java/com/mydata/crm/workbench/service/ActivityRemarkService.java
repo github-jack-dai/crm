@@ -8,4 +8,6 @@ public interface ActivityRemarkService {
     List<ActivityRemark> getRemarkListByAid(String id);
 
     boolean removeRemark(String id);
+
+    boolean saveRemark(ActivityRemark activityRemark);
 }

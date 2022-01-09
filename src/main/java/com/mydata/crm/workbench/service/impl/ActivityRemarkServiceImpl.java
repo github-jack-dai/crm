@@ -29,4 +29,15 @@ public class ActivityRemarkServiceImpl implements ActivityRemarkService {
         }
         return flag;
     }
+
+    @Override
+    public boolean saveRemark(ActivityRemark activityRemark) {
+        boolean flag=true;
+        int count=activityRemarkDao.saveRemark(activityRemark);
+        System.out.println(count+"1111");
+        if(count!=1){
+            flag=false;
+        }
+        return flag;
+    }
 }

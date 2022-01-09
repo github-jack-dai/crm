@@ -11,6 +11,20 @@ public class ActivityRemark {
     private String editFlag;    //是否修改过的标记
     private String activityId;
 
+    @Override
+    public String toString() {
+        return "ActivityRemark{" +
+                "id='" + id + '\'' +
+                ", noteContent='" + noteContent + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", editTime='" + editTime + '\'' +
+                ", editBy='" + editBy + '\'' +
+                ", editFlag='" + editFlag + '\'' +
+                ", activityId='" + activityId + '\'' +
+                '}';
+    }
+
     public String getId() {
         return id;
     }
