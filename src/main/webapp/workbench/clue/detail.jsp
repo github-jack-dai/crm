@@ -53,8 +53,79 @@ request.getContextPath() + "/";
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+
+
+        showActivityList();
+		$("#aname").keydown(function (event) {
+			if (event.keyCode==13){
+			    var name=$("#aname").val();
+                $.ajax({
+                    url:"workbench/clue/getActivityListByName.do",
+                    data:{"name":name},
+                    type:"get",
+                    dataType:"json",
+                    success:function (data) {
+                        if (data.total>0){
+                           var  html="";
+                            $.each(data.dataList,function (i,n) {
+                            		html+='<tr>';
+                                	html+='<td><input type="checkbox"/></td>';
+                                    html+='<td>'+n.name+'</td>';
+                                    html+='<td>'+n.startDate+'</td>';
+                                    html+='<td>'+n.endDate+'</td>';
+                                    html+='<td>'+n.owner+'</td>';
+                                    html+='</tr>';
+                            })
+							$("#activityBody").html(html);
+                            alert("成功");
+                        }else {
+                            alert("无查询信息");
+                        }
+                    }
+                })
+			    return false;
+			}
+        })
+
 	});
-	
+    function showActivityList() {
+        $.ajax({
+            url:"workbench/clue/getActivityListByClueId.do",
+            data:{"cid":'${c.id}'},
+            dataType:"json",
+            type:"get",
+            success:function (data) {
+                var html="";
+                $.each(data,function (i,n) {
+                    html+='<tr>';
+                    html+='<td>'+n.name+'</td>';
+                    html+='<td>'+n.startDate+'</td>';
+                    html+='<td>'+n.endDate+'</td>';
+                    html+='<td>'+n.owner+'</td>';
+                    /*你能不能在恶心一点，写这里面，id访问不到，
+                    他喵的方法还要写作用域外面，找错要找半天*/
+                    html+='<td><a href="javascript:void(0);" onclick="unbund(\''+n.id+'\')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+                    html+='</tr>';
+                })
+                $("#clueBody").html(html);
+            }
+        })
+    }
+    function unbund(id) {
+        $.ajax({
+            url:"workbench/clue/unbund.do",
+            data:{"id":id},
+            type:"get",
+            dataType:"json",
+            success:function (data) {
+                if (data){
+                    showActivityList();
+                }else {
+                    alert("失败");
+                }
+            }
+        })
+    }
 </script>
 
 </head>
@@ -74,7 +145,7 @@ request.getContextPath() + "/";
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" id="aname" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -90,8 +161,8 @@ request.getContextPath() + "/";
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="activityBody">
+							<%--<tr>
 								<td><input type="checkbox"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -104,7 +175,7 @@ request.getContextPath() + "/";
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
@@ -437,8 +508,8 @@ request.getContextPath() + "/";
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="clueBody">
+						<%--<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
@@ -451,7 +522,7 @@ request.getContextPath() + "/";
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>

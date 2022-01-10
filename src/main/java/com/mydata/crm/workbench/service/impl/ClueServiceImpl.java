@@ -30,10 +30,8 @@ public class ClueServiceImpl implements ClueService {
         //获取查询的数据信息
 //        PageHelper.startPage(1,1);
         List<Clue> clueList=clueDao.getClueListByCondition(clue);
-        System.out.println("clueList输出");
         //获取查询的总记录条数
         int count=clueDao.getTotalByCondition(clue);
-        System.out.println("total输出");
         PaginationVO<Clue> vo=new PaginationVO<Clue>();
         vo.setDataList(clueList);
         vo.setTotal(count);

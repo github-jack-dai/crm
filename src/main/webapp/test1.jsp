@@ -19,5 +19,14 @@ $.ajax({
     success:function (data) {
     }
 })
+if (data){
+alert("成功");
+}else {
+alert("失败");
+}
+boolean flag=true;
+if (count!=1){
+flag=false;
+}
 </body>
 </html>

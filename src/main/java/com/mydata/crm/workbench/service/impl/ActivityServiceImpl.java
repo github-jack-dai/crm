@@ -89,4 +89,21 @@ public class ActivityServiceImpl implements ActivityService {
         Activity activity=activityDao.datail(id);
         return activity;
     }
+
+    @Override
+    public List<Activity> getActivityListByClueId(String cid) {
+        List<Activity> activityList=activityDao.getActivityListByClueId(cid);
+        return activityList;
+
+    }
+
+    @Override
+    public PaginationVO<Activity> getActivityListByName(String name) {
+        PaginationVO<Activity> vo=new PaginationVO<Activity>();
+        List<Activity> activityList=activityDao.getActivityListByName(name);
+        vo.setDataList(activityList);
+        int count=activityDao.getTotalByName(name);
+        vo.setTotal(count);
+        return vo;
+    }
 }

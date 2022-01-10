@@ -6,7 +6,10 @@ import com.mydata.crm.settings.service.UserService;
 import com.mydata.crm.utils.DateTimeUtil;
 import com.mydata.crm.utils.UUIDUtil;
 import com.mydata.crm.vo.PaginationVO;
+import com.mydata.crm.workbench.domain.Activity;
 import com.mydata.crm.workbench.domain.Clue;
+import com.mydata.crm.workbench.service.ActivityService;
+import com.mydata.crm.workbench.service.ClueActivityRelationService;
 import com.mydata.crm.workbench.service.ClueService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +28,10 @@ public class ClueController {
     private UserService userService;
     @Resource
     private ClueService clueService;
+    @Resource
+    private ActivityService activityService;
+    @Resource
+    private ClueActivityRelationService clueActivityRelationService;
     @RequestMapping(value="/getUserList.do",method = RequestMethod.GET)
     @ResponseBody
     public List<User> getUserList(){
@@ -60,6 +67,25 @@ public class ClueController {
         Clue clue=clueService.getClueById(id);
         mv.addObject("c",clue);
         mv.setViewName("workbench/clue/detail");
-        return  mv;
+        return mv;
+    }
+    @RequestMapping(value = "/getActivityListByClueId.do")
+    @ResponseBody
+    public List<Activity> getActivityListByClueId(String cid){
+        List<Activity> activityList=activityService.getActivityListByClueId(cid);
+        return activityList;
+    }
+    @RequestMapping("/unbund.do")
+    @ResponseBody
+    public boolean unbund(String id){
+        boolean flag=clueActivityRelationService.unbund(id);
+        return flag;
+    }
+    @RequestMapping("/getActivityListByName.do")
+    @ResponseBody
+    public PaginationVO<Activity> getActivityListByName(String name){
+        System.out.println("name------"+name);
+        PaginationVO<Activity> vo=activityService.getActivityListByName(name);
+        return vo;
     }
 }

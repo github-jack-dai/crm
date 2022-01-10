@@ -3,6 +3,7 @@ package com.mydata.crm.workbench.service;
 import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.domain.Activity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ActivityService {
@@ -17,4 +18,8 @@ public interface ActivityService {
     boolean update(Activity activity);
 
     Activity detail(String id);
+
+    List<Activity> getActivityListByClueId(String cid);
+
+    PaginationVO<Activity> getActivityListByName(String name);
 }
