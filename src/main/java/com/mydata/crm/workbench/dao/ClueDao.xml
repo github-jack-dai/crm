@@ -4,8 +4,142 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mydata.crm.workbench.dao.ClueDao">
-
-  	
+    <select id="getClueById" resultType="Clue">
+        select c.id,
+        c.fullname,
+        c.appellation,
+        c.company,
+        c.job,
+        c.email,
+        c.phone,
+        c.website,
+        c.mphone,
+        c.state,
+        c.source,
+        c.createBy,
+        c.createTime,
+        c.description,
+        c.contactSummary,
+        c.nextContactTime,
+        c.address,
+        u.name owner
+        from tbl_clue c left join tbl_user u
+        on c.owner=u.id
+        where c.id=#{id}
+    </select>
+    <select id="getTotalByCondition" resultType="int">
+        select count(*) from tbl_clue
+        <where>
+            <if test="appellation!=null and appellation!=''">
+                appellation like '%' #{appellation} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                and source=#{source}
+            </if>
+            <if test="state!=null and state!=''">
+                and state=#{state}
+            </if>
+            <if test="owner!=null and owner!=''">
+                and owner like '%' #{owner} '%'
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone=#{phone}
+            </if>
+            <if test="mphone!=null and mphone!=''">
+                and mphone=#{mphone}
+            </if>
+            <if test="company!=null and company!=''">
+                and company like '%' #{company} '%'
+            </if>
+        </where>
+    </select>
+    <select id="getClueListByCondition" resultType="Clue">
+        select c.id,
+        c.fullname,
+        c.appellation,
+        c.company,
+        c.job,
+        c.email,
+        c.phone,
+        c.website,
+        c.mphone,
+        c.state,
+        c.source,
+        c.createBy,
+        c.createTime,
+        c.description,
+        c.contactSummary,
+        c.nextContactTime,
+        c.address,
+        u.name owner
+        from tbl_clue c left join tbl_user u
+        on c.owner=u.id
+        <where>
+            <if test="appellation!=null and appellation!=''">
+                c.appellation like '%' #{appellation} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                and c.source=#{source}
+            </if>
+            <if test="state!=null and state!=''">
+                and c.state=#{state}
+            </if>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+            <if test="phone!=null and phone!=''">
+                and c.phone=#{phone}
+            </if>
+            <if test="mphone!=null and mphone!=''">
+                and c.mphone=#{mphone}
+            </if>
+            <if test="company!=null and company!=''">
+                and c.company like '%' #{company} '%'
+            </if>
+        </where>
+    </select>
+    <insert id="save">
+        insert into tbl_clue(
+            id,
+            fullname,
+            appellation,
+            owner,
+            company,
+            job,
+            email,
+            phone,
+            website,
+            mphone,
+            state,
+            source,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+        )
+        values(
+            #{id},
+            #{fullname},
+            #{appellation},
+            #{owner},
+            #{company},
+            #{job},
+            #{email},
+            #{phone},
+            #{website},
+            #{mphone},
+            #{state},
+            #{source},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+        )
+    </insert>
 </mapper>
 
 
