@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface CustomerDao {
 
+    Customer getCustomerByName(String company);
+
+    int save(Customer customer);
 }

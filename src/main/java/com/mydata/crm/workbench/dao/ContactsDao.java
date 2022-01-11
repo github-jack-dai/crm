@@ -5,4 +5,5 @@ import com.mydata.crm.workbench.domain.Contacts;
 public interface ContactsDao {
 
 
+    int save(Contacts contacts);
 }

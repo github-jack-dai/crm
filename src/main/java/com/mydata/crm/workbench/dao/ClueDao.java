@@ -14,4 +14,6 @@ public interface ClueDao {
     int getTotalByCondition(Clue clue);
 
     Clue getClueById(String id);
+
+    int delete(String clueId);
 }

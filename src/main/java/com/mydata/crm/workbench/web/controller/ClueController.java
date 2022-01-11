@@ -107,9 +107,22 @@ public class ClueController {
         return mv;
     }
     @RequestMapping(value = "/convertDel.do")
-    public void convertDel(Tran tran, String flag){
+    public ModelAndView convertDel(Tran tran,String clueId, String flag,HttpServletRequest request){
+        ModelAndView mv=new ModelAndView();
+        String createBy=((User)request.getSession().getAttribute("user")).getName();
+        //是否需要创建交易
         if ("a".equals(flag)){
-
+            tran.setId(UUIDUtil.getUUID());
+            tran.setCreateBy(createBy);
+            tran.setCreateTime(DateTimeUtil.getSysTime());
+        }else {
+            tran=null;
         }
+        System.out.println("clueId======"+clueId);
+        boolean flag1=clueService.convert(clueId,tran,createBy);
+        if (flag1){
+            mv.setViewName("workbench/clue/index");
+        }
+        return mv;
     }
 }
