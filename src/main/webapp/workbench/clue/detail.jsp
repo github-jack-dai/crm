@@ -53,23 +53,66 @@ request.getContextPath() + "/";
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
-
-
+        $("#qx").click(function () {
+            $("input[name=xz]").prop("checked",this.checked);
+        })
+		//意思是给activityBody下面$("input[name=xz]")的内容绑定单击事件
+        $("#activityBody").on("click",$("input[name=xz]"),function () {
+            $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length)
+        })
+		$("#openBundModal").click(function () {
+            $("#aname").val("");
+            $("#qx").prop("checked",false);
+            var name=$("#aname").val();
+            $.ajax({
+                url:"workbench/clue/getActivityListByName.do",
+                data:{"name":name,"cid":'${c.id}'
+				},
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    if (data.total>0){
+                        var  html="";
+                        $.each(data.dataList,function (i,n) {
+                            html+='<tr>';
+                            html+='<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
+                            html+='<td>'+n.name+'</td>';
+                            html+='<td>'+n.startDate+'</td>';
+                            html+='<td>'+n.endDate+'</td>';
+                            html+='<td>'+n.owner+'</td>';
+                            html+='</tr>';
+                        })
+                        $("#activityBody").html(html);
+                        $("#bundModal").modal("show");
+                    }else {
+                        alert("无更多关联");
+                    }
+                }
+            })
+        })
+		$("#clossBundModal").click(function () {
+            $("#aname").val("");
+            $("#bundModal").modal("hide");
+        })
         showActivityList();
+        //搜索的确认，回车搜索
 		$("#aname").keydown(function (event) {
 			if (event.keyCode==13){
 			    var name=$("#aname").val();
+
                 $.ajax({
                     url:"workbench/clue/getActivityListByName.do",
-                    data:{"name":name},
-                    type:"get",
+                    data:{"name":name,
+						"cid":'${c.id}'
+					},
+                    type:"post",
                     dataType:"json",
                     success:function (data) {
                         if (data.total>0){
                            var  html="";
                             $.each(data.dataList,function (i,n) {
                             		html+='<tr>';
-                                	html+='<td><input type="checkbox"/></td>';
+                                	html+='<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
                                     html+='<td>'+n.name+'</td>';
                                     html+='<td>'+n.startDate+'</td>';
                                     html+='<td>'+n.endDate+'</td>';
@@ -77,7 +120,6 @@ request.getContextPath() + "/";
                                     html+='</tr>';
                             })
 							$("#activityBody").html(html);
-                            alert("成功");
                         }else {
                             alert("无查询信息");
                         }
@@ -86,8 +128,45 @@ request.getContextPath() + "/";
 			    return false;
 			}
         })
+		//添加关联模板
+		$("#addRelationByActivityId").click(function () {
+            var $xz=$("input[name=xz]:checked");
+            if ($xz.length==0){
+                alert("请选择需要删除的记录");
+            }else {
+                var param="";
+                for (var i=0;i<$xz.length;i++){
+                    //犯错需注意，普通js对象不可用jquery方法，如需使用需要转成jquery
+                    /*param+="id="+$xz[i].value;
+                    if (i<$xz.length-1){
+                        param+="&";
+					}*/
+                    param+="id="+$.trim($($xz[i]).val());
+                    if (i<$xz.length-1){
+                        param+="&";
+                    }
+				}
+				//字符串传值一定要用字符串不要用json串
+                $.ajax({
+                    url:"workbench/clue/addRelationByActivityId.do",
+                    data:param+"&cid="+'${c.id}',
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        if (data){
+                            showActivityList();
+                            $("#aname").val("");
+                            $("#bundModal").modal("hide");
+                        }else {
+                            alert("关联失败");
+                        }
+                    }
+                })
+			}
 
+        })
 	});
+	//显示activity的列表
     function showActivityList() {
         $.ajax({
             url:"workbench/clue/getActivityListByClueId.do",
@@ -95,6 +174,7 @@ request.getContextPath() + "/";
             dataType:"json",
             type:"get",
             success:function (data) {
+                $("#clueBody").html("");
                 var html="";
                 $.each(data,function (i,n) {
                     html+='<tr>';
@@ -111,6 +191,7 @@ request.getContextPath() + "/";
             }
         })
     }
+    //删除activity列表
     function unbund(id) {
         $.ajax({
             url:"workbench/clue/unbund.do",
@@ -121,7 +202,7 @@ request.getContextPath() + "/";
                 if (data){
                     showActivityList();
                 }else {
-                    alert("失败");
+                    alert("删除失败");
                 }
             }
         })
@@ -153,7 +234,7 @@ request.getContextPath() + "/";
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+								<td><input type="checkbox" id="qx"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -180,8 +261,8 @@ request.getContextPath() + "/";
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" class="btn btn-default" id="clossBundModal">取消</button>
+					<button type="button" class="btn btn-primary" id="addRelationByActivityId">关联</button>
 				</div>
 			</div>
 		</div>
@@ -528,7 +609,7 @@ request.getContextPath() + "/";
 			</div>
 			
 			<div>
-				<a href="javascript:void(0);" data-toggle="modal" data-target="#bundModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
+				<a href="javascript:void(0);" id="openBundModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
 			</div>
 		</div>
 	</div>

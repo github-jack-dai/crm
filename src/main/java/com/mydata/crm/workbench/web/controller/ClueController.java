@@ -8,6 +8,7 @@ import com.mydata.crm.utils.UUIDUtil;
 import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.domain.Activity;
 import com.mydata.crm.workbench.domain.Clue;
+import com.mydata.crm.workbench.domain.ClueActivityRelation;
 import com.mydata.crm.workbench.service.ActivityService;
 import com.mydata.crm.workbench.service.ClueActivityRelationService;
 import com.mydata.crm.workbench.service.ClueService;
@@ -83,9 +84,17 @@ public class ClueController {
     }
     @RequestMapping("/getActivityListByName.do")
     @ResponseBody
-    public PaginationVO<Activity> getActivityListByName(String name){
+    public PaginationVO<Activity> getActivityListByName(String name,String cid){
         System.out.println("name------"+name);
-        PaginationVO<Activity> vo=activityService.getActivityListByName(name);
+        System.out.println("cid------"+cid);
+        PaginationVO<Activity> vo=activityService.getActivityListByName(name,cid);
         return vo;
+    }
+    @RequestMapping(value= "/addRelationByActivityId.do")
+    @ResponseBody//又忘记添加注解了，裂开
+    public boolean addRelationByActivityId(String id[],String cid){
+        //字符串传值一定要用字符串不要用json串
+        boolean flag=clueActivityRelationService.addRelationByActivityId(id,cid);
+        return flag;
     }
 }

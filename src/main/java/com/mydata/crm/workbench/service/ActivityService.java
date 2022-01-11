@@ -21,5 +21,5 @@ public interface ActivityService {
 
     List<Activity> getActivityListByClueId(String cid);
 
-    PaginationVO<Activity> getActivityListByName(String name);
+    PaginationVO<Activity> getActivityListByName(String name,String cid);
 }

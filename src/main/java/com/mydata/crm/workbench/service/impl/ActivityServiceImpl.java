@@ -98,11 +98,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public PaginationVO<Activity> getActivityListByName(String name) {
+    public PaginationVO<Activity> getActivityListByName(String name,String cid) {
         PaginationVO<Activity> vo=new PaginationVO<Activity>();
-        List<Activity> activityList=activityDao.getActivityListByName(name);
+        List<Activity> activityList=activityDao.getActivityListByName(name,cid);
         vo.setDataList(activityList);
-        int count=activityDao.getTotalByName(name);
+        int count=activityDao.getTotalByName(name,cid);
         vo.setTotal(count);
         return vo;
     }
