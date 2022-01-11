@@ -9,6 +9,7 @@ import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.domain.Activity;
 import com.mydata.crm.workbench.domain.Clue;
 import com.mydata.crm.workbench.domain.ClueActivityRelation;
+import com.mydata.crm.workbench.domain.Tran;
 import com.mydata.crm.workbench.service.ActivityService;
 import com.mydata.crm.workbench.service.ClueActivityRelationService;
 import com.mydata.crm.workbench.service.ClueService;
@@ -96,5 +97,19 @@ public class ClueController {
         //字符串传值一定要用字符串不要用json串
         boolean flag=clueActivityRelationService.addRelationByActivityId(id,cid);
         return flag;
+    }
+    @RequestMapping(value = "/convert.do",method = RequestMethod.GET)
+    public ModelAndView convert(String cid){
+        ModelAndView mv=new ModelAndView();
+        Clue clue=clueService.getClueById(cid);
+        mv.addObject("c",clue);
+        mv.setViewName("workbench/clue/convert");
+        return mv;
+    }
+    @RequestMapping(value = "/convertDel.do")
+    public void convertDel(Tran tran, String flag){
+        if ("a".equals(flag)){
+
+        }
     }
 }

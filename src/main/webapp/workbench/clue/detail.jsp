@@ -90,7 +90,7 @@ request.getContextPath() + "/";
                 }
             })
         })
-		$("#clossBundModal").click(function () {
+		$("#closeBundModal").click(function () {
             $("#aname").val("");
             $("#bundModal").modal("hide");
         })
@@ -261,7 +261,7 @@ request.getContextPath() + "/";
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" id="clossBundModal">取消</button>
+					<button type="button" class="btn btn-default" id="closeBundModal">取消</button>
 					<button type="button" class="btn btn-primary" id="addRelationByActivityId">关联</button>
 				</div>
 			</div>
@@ -435,7 +435,7 @@ request.getContextPath() + "/";
 			<h3>${c.fullname}${c.appellation} <small>${c.company}</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.jsp';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
+			<button type="button" class="btn btn-default" onclick="window.location.href='workbench/clue/convert.do?cid='+'${c.id}';"><span class="glyphicon glyphicon-retweet"></span> 转换</button>
 			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>

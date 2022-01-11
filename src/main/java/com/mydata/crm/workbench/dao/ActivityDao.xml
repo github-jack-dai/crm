@@ -10,9 +10,11 @@
             <if test="name!=null and name!=''">
                 a.name like '%' #{name} '%'
             </if>
-            and a.id not in(select
-            activityId from tbl_clue_activity_relation
-            where clueId=#{cid})
+            <if test="cid!=null and cid!=''">
+                and a.id not in(select
+                activityId from tbl_clue_activity_relation
+                where clueId=#{cid})
+            </if>
         </where>
     </select>
     <select id="getActivityListByName" resultType="Activity">
@@ -24,9 +26,11 @@
         <if test="name!=null and name!=''">
             a.name like '%' #{name} '%'
         </if>
+        <if test="cid!=null and cid!=''">
             and a.id not in(select
             activityId from tbl_clue_activity_relation
             where clueId=#{cid})
+        </if>
         </where>
     </select>
     <select id="getActivityListByClueId" resultType="Activity">
