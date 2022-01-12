@@ -30,8 +30,13 @@ public class TransactionController {
     @RequestMapping(value = "/getCustomerName.do")
     @ResponseBody
     public List<String> getCustomerName(String name){
-        System.out.println("进来了-------");
+        if (name==null || "".equals(name)){
+            //这个输出语句不会执行，但是加上这句话确实可以防止删除为空时查询所有
+            System.out.println("跳过一次");
+            return null;
+        }
         List<String> list=customerService.getCustomerName(name);
+        System.out.println(list);
         return list;
     }
 }

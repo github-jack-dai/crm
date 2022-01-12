@@ -4,10 +4,23 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mydata.crm.workbench.dao.ContactsDao">
+    <select id="getTotalByName" resultType="int">
+        select count(*) from tbl_contacts  <where>
+        <if test="name!=null and name!=''">
+            fullname like '%' #{name} '%'
+        </if>
+    </where>
+    </select>
+    <select id="getContactsListByName" resultType="Contacts">
+        select * from tbl_contacts <where>
+        <if test="name!=null and name!=''">
+            fullname like '%' #{name} '%'
+        </if>
+    </where>
+    </select>
     <insert id="save">
 
         insert into tbl_contacts(
-
             id,
             owner,
             source,
@@ -24,12 +37,8 @@
             contactSummary,
             nextContactTime,
             address
-
-
         )
-
         values(
-
             #{id},
             #{owner},
             #{source},
@@ -46,8 +55,6 @@
             #{contactSummary},
             #{nextContactTime},
             #{address}
-
-
         )
 
     </insert>

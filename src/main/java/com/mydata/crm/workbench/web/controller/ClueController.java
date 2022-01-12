@@ -6,13 +6,11 @@ import com.mydata.crm.settings.service.UserService;
 import com.mydata.crm.utils.DateTimeUtil;
 import com.mydata.crm.utils.UUIDUtil;
 import com.mydata.crm.vo.PaginationVO;
-import com.mydata.crm.workbench.domain.Activity;
-import com.mydata.crm.workbench.domain.Clue;
-import com.mydata.crm.workbench.domain.ClueActivityRelation;
-import com.mydata.crm.workbench.domain.Tran;
+import com.mydata.crm.workbench.domain.*;
 import com.mydata.crm.workbench.service.ActivityService;
 import com.mydata.crm.workbench.service.ClueActivityRelationService;
 import com.mydata.crm.workbench.service.ClueService;
+import com.mydata.crm.workbench.service.ContactsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +32,8 @@ public class ClueController {
     private ActivityService activityService;
     @Resource
     private ClueActivityRelationService clueActivityRelationService;
+    @Resource
+    private ContactsService contactsService;
     @RequestMapping(value="/getUserList.do",method = RequestMethod.GET)
     @ResponseBody
     public List<User> getUserList(){
@@ -124,5 +124,12 @@ public class ClueController {
             mv.setViewName("workbench/clue/index");
         }
         return mv;
+    }
+    @RequestMapping(value = "/getContactsListByName.do")
+    @ResponseBody
+    public PaginationVO<Contacts> getContactsListByName(String name){
+        PaginationVO<Contacts> vo= contactsService.getContactsListByName(name);
+        System.out.println(vo);
+        return vo;
     }
 }

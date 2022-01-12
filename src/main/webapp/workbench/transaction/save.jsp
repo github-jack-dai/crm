@@ -28,6 +28,7 @@ request.getContextPath() + "/";
 <script type="text/javascript" src="jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
 
 <script type="text/javascript">
+
 		var json={
 		    <%
 		    while(it.hasNext()){
@@ -39,8 +40,23 @@ request.getContextPath() + "/";
 			}
 		    %>
 		}
-		console.log(json);
         $(function () {
+            $(".timeTop").datetimepicker({
+                minView: "month",
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayBtn: true,
+                pickerPosition: "top-left"
+            });
+            $(".timeButtom").datetimepicker({
+                minView: "month",
+                language:  'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayBtn: true,
+                pickerPosition: "buttom-left"
+            });
             $("#create-customerName").typeahead({
                 source: function (query, process) {
                     $.get(
@@ -63,6 +79,136 @@ request.getContextPath() + "/";
                 var possibility=json[stage];
                 $("#create-possibility").val(possibility+'%');
             })
+			$("#openMarketActivity").click(function () {
+                $("#aname").val("");
+				var name=$("#aname").val();
+				$.post("workbench/clue/getActivityListByName.do",
+					{"name":name},
+					function (data) {
+
+				    if (data.total>0){
+                        //alert("标记1");
+                        var html="";
+                        $.each(data.dataList,function (i,n) {
+                        		html+='<tr>';
+                            	html+='<td><input type="radio" name="activity" value="'+n.id+'"/></td>';
+                                html+='<td id="a'+n.id+'">'+n.name+'</td>';
+                                html+='<td>'+n.startDate+'</td>';
+                                html+='<td>'+n.endDate+'</td>';
+                                html+='<td>'+n.owner+'</td>';
+                                html+='</tr>';
+                        })
+						$("#activityBody").html(html);
+                        $("#findMarketActivity").modal("show");
+					} else {
+				        alert("查询内容不存在")
+					}
+
+                },"json");
+            })
+			$("#closeActivityModal").click(function () {
+                $("#findMarketActivity").modal("hide");
+            })
+			$("#aname").keydown(function (event) {
+				if(event.keyCode==13){
+                    var name=$("#aname").val();
+                    $.post("workbench/clue/getActivityListByName.do",
+                        {"name":name},
+                        function (data) {
+                            if (data.total>0){
+                                //alert("标记1");
+                                var html="";
+                                $.each(data.dataList,function (i,n) {
+                                    html+='<tr>';
+                                    html+='<td><input type="radio" name="activity" value="'+n.id+'"/></td>';
+                                    html+='<td id="a'+n.id+'">'+n.name+'</td>';
+                                    html+='<td>'+n.startDate+'</td>';
+                                    html+='<td>'+n.endDate+'</td>';
+                                    html+='<td>'+n.owner+'</td>';
+                                    html+='</tr>';
+                                })
+                                $("#activityBody").html(html);
+                            } else {
+                                alert("查询内容不存在")
+                            }
+
+                        },"json");
+				    return false;
+				}
+            })
+			$("#addActivityId").click(function () {
+				if ($("input[name=activity]:checked").prop("checked")){
+                    var id=$("input[name=activity]:checked").val();
+					$("#create-activityId").val(id);
+                    var name=$("#a"+id).html();
+                    $("#create-activityName").val(name);
+                    $("#findMarketActivity").modal("hide");
+				}
+            })
+			$("#openFindContacts").click(function () {
+                $("#bname").val("");
+                var name=$("#bname").val();
+                $.post("workbench/clue/getContactsListByName.do",
+                    {"name":name},
+                    function (data) {
+                        if (data.total>0){
+                            //alert("标记1");
+                            var html="";
+                            $.each(data.dataList,function (i,n) {
+                                html+=' <tr>';
+                                html+='<td><input type="radio" name="contacts" value="'+n.id+'"/></td>';
+                                html+='<td id="b'+n.id+'">'+n.fullname+'</td>';
+                                html+='<td>'+n.email+'</td>';
+                                html+='<td>'+n.mphone+'</td>';
+                                html+='</tr>';
+                            })
+                            $("#contactsBody").html(html);
+                            $("#findContacts").modal("show");
+                        } else {
+                            alert("查询内容不存在")
+                        }
+
+                    },"json");
+            })
+            $("#closeContactsModal").click(function () {
+                $("#findContacts").modal("hide");
+            })
+            $("#bname").keydown(function (event) {
+                if(event.keyCode==13){
+                    var name=$("#bname").val();
+                    $.post("workbench/clue/getContactsListByName.do",
+                        {"name":name},
+                        function (data) {
+                            if (data.total>0){
+                                //alert("标记1");
+                                var html="";
+                                $.each(data.dataList,function (i,n) {
+                               		html+=' <tr>';
+                                    html+='<td><input type="radio" name="contacts" value="'+n.id+'"/></td>';
+									html+='<td id="b'+n.id+'">'+n.fullname+'</td>';
+									html+='<td>'+n.email+'</td>';
+                                    html+='<td>'+n.mphone+'</td>';
+                                    html+='</tr>';
+                                })
+                                $("#contactsBody").html(html);
+                            } else {
+                                alert("查询内容不存在")
+                            }
+
+                        },"json");
+                    return false;
+                }
+            })
+            $("#addContactsId").click(function () {
+                if ($("input[name=contacts]:checked").prop("checked")){
+                    var id=$("input[name=contacts]:checked").val();
+                    $("#create-contactsId").val(id);
+                    var name=$("#b"+id).html();
+                    alert(name)
+                    $("#create-contactsName").val(name);
+                    $("#findContacts").modal("hide");
+                }
+            })
     })
 </script>
 </head>
@@ -82,7 +228,7 @@ request.getContextPath() + "/";
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" style="width: 300px;" id="aname" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -98,7 +244,7 @@ request.getContextPath() + "/";
 							</tr>
 						</thead>
 						<tbody id="activityBody">
-							<tr>
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -111,9 +257,13 @@ request.getContextPath() + "/";
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="closeActivityModal">取消</button>
+					<button type="button" class="btn btn-primary" id="addActivityId">关联</button>
 				</div>
 			</div>
 		</div>
@@ -133,7 +283,7 @@ request.getContextPath() + "/";
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
+						    <input type="text" id="bname" class="form-control" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -148,7 +298,7 @@ request.getContextPath() + "/";
 							</tr>
 						</thead>
 						<tbody id="contactsBody">
-							<tr>
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
@@ -159,9 +309,13 @@ request.getContextPath() + "/";
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
 								<td>12345678901</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" id="closeContactsModal">取消</button>
+					<button type="button" class="btn btn-primary" id="addContactsId">关联</button>
 				</div>
 			</div>
 		</div>
@@ -200,7 +354,7 @@ request.getContextPath() + "/";
 			</div>
 			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expectedClosingDate">
+				<input type="text" class="form-control timeButtom" id="create-expectedClosingDate">
 			</div>
 		</div>
 		
@@ -246,16 +400,18 @@ request.getContextPath() + "/";
 				  </c:forEach>
 				</select>
 			</div>
-			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" id="openMarketActivity"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-activityId">
+				<input type="text" class="form-control" id="create-activityName" placeholder="点击左侧搜索按钮进行添加" readonly>
+				<input type="hidden" name="activityId" id="create-activityId">
 			</div>
 		</div>
 		
 		<div class="form-group">
-			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" id="openFindContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-contactsId">
+				<input type="text" class="form-control" id="create-contactsName" placeholder="点击左侧搜索按钮进行添加" readonly>
+				<input type="hidden" name="contactsId" id="create-contactsId">
 			</div>
 		</div>
 		
@@ -276,7 +432,7 @@ request.getContextPath() + "/";
 		<div class="form-group">
 			<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-nextContactTime">
+				<input type="text" class="form-control timeTop" id="create-nextContactTime">
 			</div>
 		</div>
 		
