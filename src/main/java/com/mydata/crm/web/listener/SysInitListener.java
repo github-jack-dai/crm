@@ -12,9 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SysInitListener implements ServletContextListener {
     /*
@@ -39,6 +37,15 @@ public class SysInitListener implements ServletContextListener {
             application.setAttribute(key,map.get(key));
         }
         System.out.println("服务器缓存处理数据字典结束");
+        Map<String,String> pMap=new HashMap<String,String>();
+        ResourceBundle rb=ResourceBundle.getBundle("conf/Stage2Possibility");
+        Enumeration<String> keys = rb.getKeys();
+        while(keys.hasMoreElements()){
+            String key=keys.nextElement();
+            String value=rb.getString(key);
+            pMap.put(key,value);
+        }
+        application.setAttribute("pMap",pMap);
     }
 
     @Override

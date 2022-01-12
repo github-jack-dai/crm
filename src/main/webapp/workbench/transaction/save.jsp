@@ -1,9 +1,16 @@
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.Iterator" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String basePath = request.getScheme() + "://" +
 request.getServerName() + ":" + request.getServerPort() +
 request.getContextPath() + "/";
+	Map<String,String> pMap=(Map<String,String>)application.getAttribute("pMap");
+	Set<String> keys=pMap.keySet();
+	Iterator<String> it=keys.iterator();
+
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -21,6 +28,18 @@ request.getContextPath() + "/";
 <script type="text/javascript" src="jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
 
 <script type="text/javascript">
+		var json={
+		    <%
+		    while(it.hasNext()){
+				String key=it.next();
+				String value=pMap.get(key);
+				%>
+			"<%=key%>":<%=value%>,
+			<%
+			}
+		    %>
+		}
+		console.log(json);
         $(function () {
             $("#create-customerName").typeahead({
                 source: function (query, process) {
@@ -39,6 +58,11 @@ request.getContextPath() + "/";
 			$("#saveBtn").click(function () {
 				alert(11);
 			})
+			$("#create-stage").change(function () {
+				var stage=$("#create-stage").val();
+                var possibility=json[stage];
+                $("#create-possibility").val(possibility+'%');
+            })
     })
 </script>
 </head>
@@ -187,7 +211,7 @@ request.getContextPath() + "/";
 			</div>
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-			  <select class="form-control" id="create-transactionStage">
+			  <select class="form-control" id="create-stage">
 			  	<option></option>
 			  	<c:forEach items="${stageList}" var="s">
 					<option value="${s.value}">${s.text}</option>
@@ -208,7 +232,7 @@ request.getContextPath() + "/";
 			</div>
 			<label for="create-possibility" class="col-sm-2 control-label">可能性</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-possibility">
+				<input type="text" class="form-control" id="create-possibility" readonly>
 			</div>
 		</div>
 		
