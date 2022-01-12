@@ -3,13 +3,18 @@ package com.mydata.crm.workbench.web.controller;
 import com.mydata.crm.settings.dao.UserDao;
 import com.mydata.crm.settings.domain.User;
 import com.mydata.crm.settings.service.UserService;
+import com.mydata.crm.utils.DateTimeUtil;
+import com.mydata.crm.utils.UUIDUtil;
+import com.mydata.crm.workbench.domain.Tran;
 import com.mydata.crm.workbench.service.CustomerService;
+import com.mydata.crm.workbench.service.TranService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -19,8 +24,30 @@ public class TransactionController {
     private UserService userService;
     @Resource
     private CustomerService customerService;
+    @Resource
+    private TranService tranService;
     @RequestMapping(value = "/save.do")
-    public ModelAndView save(){
+    public ModelAndView save(Tran tran, String customerName, HttpServletRequest request){
+        tran.setCreateBy(((User)request.getSession().getAttribute("user")).getName());
+        tran.setId(UUIDUtil.getUUID());
+        tran.setCreateTime(DateTimeUtil.getSysTime());
+        ModelAndView mv=new ModelAndView();
+        boolean flag=tranService.save(tran,customerName);
+       /*
+       如果没有执行下面这句话的话会刷新当前页面一次，这里有优化的地方，
+       比如加入异常提示，提示客户哪儿有问题，不过这里从业务逻辑来看，
+       没什么需要提醒客户的，要提醒的话，前端就可以做到了，如果有啥
+       特殊情况还是需要我们来解决，就直接重定向到首页吧，完美的操作就是
+       在输出一个添加成功，这个功能已经实现，测试了很多次，基本没问题了
+       * */
+        if (flag){
+            mv.addObject("success",flag);
+            mv.setViewName("redirect:/workbench/transaction/index.jsp");
+        }
+        return mv;
+    }
+    @RequestMapping(value = "/jumpSave.do")
+    public ModelAndView jumpSave(){
         ModelAndView mv=new ModelAndView();
         List<User> userList = userService.getUserList();
         mv.addObject("uList",userList);

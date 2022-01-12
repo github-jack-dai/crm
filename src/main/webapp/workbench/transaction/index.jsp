@@ -3,6 +3,7 @@
 String basePath = request.getScheme() + "://" +
 request.getServerName() + ":" + request.getServerPort() +
 request.getContextPath() + "/";
+String success=request.getParameter("success");
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -21,8 +22,21 @@ request.getContextPath() + "/";
 <script type="text/javascript">
 
 	$(function(){
-		
-		
+	    //一个细节的优化
+        var success=<%=success%>;
+		<%--console.log(success);--%>
+			<%--var flag=false;--%>
+		<%--console.log(1+'${success}');--%>
+		<%--alert(${"success"});--%>
+       /* 这个取参的方式才是正确的，我之前不加双引号
+       的方法是错误的，那种是用来从四大域中取对象的,
+       而加了双引号的方法相当于取一个普通的字符串，
+       老师之前讲过这些内容，我却给忘了，用request
+       的方法取参也可以，不过麻烦了点，多种选择也好
+        */
+		if (success){//这个弹窗原理是只有success不为空就可以弹窗提示
+		    alert("添加成功");
+        }
 		
 	});
 	
@@ -135,7 +149,7 @@ request.getContextPath() + "/";
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 10px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/save.do';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/jumpSave.do';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" onclick="window.location.href='workbench/transaction/edit.jsp';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>

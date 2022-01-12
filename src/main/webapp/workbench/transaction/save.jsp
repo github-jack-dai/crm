@@ -72,7 +72,7 @@ request.getContextPath() + "/";
                 delay: 1000
             });
 			$("#saveBtn").click(function () {
-				alert(11);
+				$("#saveOk").submit();
 			})
 			$("#create-stage").change(function () {
 				var stage=$("#create-stage").val();
@@ -204,7 +204,6 @@ request.getContextPath() + "/";
                     var id=$("input[name=contacts]:checked").val();
                     $("#create-contactsId").val(id);
                     var name=$("#b"+id).html();
-                    alert(name)
                     $("#create-contactsName").val(name);
                     $("#findContacts").modal("hide");
                 }
@@ -330,11 +329,11 @@ request.getContextPath() + "/";
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form class="form-horizontal" role="form" style="position: relative; top: -30px;">
+	<form class="form-horizontal" id="saveOk" action="workbench/transaction/save.do" method="post" role="form" style="position: relative; top: -30px;">
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-transactionOwner">
+				<select class="form-control" id="create-transactionOwner" name="owner">
 				  <option></option>
 				  <c:forEach items="${uList}" var="u">
 					  <option value="${u.id}" ${user.id eq u.id?"selected":""}>${u.name}</option>
@@ -343,29 +342,29 @@ request.getContextPath() + "/";
 			</div>
 			<label for="create-amountOfMoney" class="col-sm-2 control-label">金额</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-money">
+				<input type="text" class="form-control" name="money" id="create-money">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-transactionName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-name">
+				<input type="text" class="form-control" name="name" id="create-name">
 			</div>
 			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control timeButtom" id="create-expectedClosingDate">
+				<input type="text" class="form-control timeButtom" name="expectedDate" id="create-expectedClosingDate">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-accountName" class="col-sm-2 control-label">客户名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
+				<input type="text" class="form-control" name="customerName" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
 			</div>
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-			  <select class="form-control" id="create-stage">
+			  <select class="form-control" id="create-stage" name="stage">
 			  	<option></option>
 			  	<c:forEach items="${stageList}" var="s">
 					<option value="${s.value}">${s.text}</option>
@@ -377,7 +376,7 @@ request.getContextPath() + "/";
 		<div class="form-group">
 			<label for="create-transactionType" class="col-sm-2 control-label">类型</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-transactionType">
+				<select class="form-control" id="create-transactionType" name="type">
 				  <option></option>
 				  <c:forEach items="${transactionTypeList}" var="t">
 					  <option value="${t.value}">${t.text}</option>
@@ -393,7 +392,7 @@ request.getContextPath() + "/";
 		<div class="form-group">
 			<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-clueSource">
+				<select class="form-control" id="create-clueSource" name="source">
 				  <option></option>
 				  <c:forEach items="${sourceList}" var="s">
 					  <option value="${s.value}">${s.text}</option>
@@ -418,21 +417,21 @@ request.getContextPath() + "/";
 		<div class="form-group">
 			<label for="create-describe" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe"></textarea>
+				<textarea class="form-control" name="description" rows="3" id="create-describe"></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-contactSummary" class="col-sm-2 control-label">联系纪要</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-contactSummary"></textarea>
+				<textarea class="form-control" rows="3" name="contactSummary" id="create-contactSummary"></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control timeTop" id="create-nextContactTime">
+				<input type="text" class="form-control timeTop" name="nextContactTime" id="create-nextContactTime">
 			</div>
 		</div>
 		
