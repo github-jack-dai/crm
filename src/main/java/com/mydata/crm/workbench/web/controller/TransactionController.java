@@ -31,7 +31,10 @@ public class TransactionController {
     @RequestMapping(value = "/detail.do")
     public ModelAndView detail(String id){
         ModelAndView mv=new ModelAndView();
-
+        Tran tran=tranService.detail(id);
+        System.out.println(tran);
+        mv.addObject("t",tran);
+        mv.setViewName("workbench/transaction/detail");
         return  mv;
     }
     @RequestMapping(value = "/pageList.do")

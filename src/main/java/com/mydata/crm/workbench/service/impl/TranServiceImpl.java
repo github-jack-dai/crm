@@ -77,4 +77,10 @@ public class TranServiceImpl implements TranService {
         System.out.println(222);
         return vo;
     }
+
+    @Override
+    public Tran detail(String id) {
+        Tran tran=tranDao.detail(id);
+        return tran;
+    }
 }

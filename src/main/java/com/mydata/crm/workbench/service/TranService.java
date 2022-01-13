@@ -7,4 +7,6 @@ public interface TranService {
     boolean save(Tran tran, String customerName);
 
     PaginationVO<Tran> pageList(Tran tran);
+
+    Tran detail(String id);
 }
