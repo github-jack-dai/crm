@@ -2,6 +2,7 @@ package com.mydata.crm.workbench.service.impl;
 
 import com.mydata.crm.utils.DateTimeUtil;
 import com.mydata.crm.utils.UUIDUtil;
+import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.dao.CustomerDao;
 import com.mydata.crm.workbench.dao.TranDao;
 import com.mydata.crm.workbench.dao.TranHistoryDao;
@@ -12,6 +13,7 @@ import com.mydata.crm.workbench.service.TranService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class TranServiceImpl implements TranService {
@@ -61,5 +63,18 @@ public class TranServiceImpl implements TranService {
             flag = false;
         }
         return flag;
+    }
+
+    @Override
+    public PaginationVO<Tran> pageList(Tran tran) {
+        System.out.println(111);
+        PaginationVO<Tran> vo=new  PaginationVO<Tran>();
+        List<Tran> tranList=tranDao.getTranListByCondition(tran);
+        System.out.println(333);
+        vo.setDataList(tranList);
+        int total=tranDao.getTotalByCondition(tran);
+        vo.setTotal(total);
+        System.out.println(222);
+        return vo;
     }
 }

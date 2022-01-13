@@ -8,4 +8,8 @@ import java.util.Map;
 public interface TranDao {
 
     int save(Tran tran);
+
+    List<Tran> getTranListByCondition(Tran tran);
+
+    int getTotalByCondition(Tran tran);
 }

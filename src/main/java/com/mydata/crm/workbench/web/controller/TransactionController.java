@@ -1,10 +1,12 @@
 package com.mydata.crm.workbench.web.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.mydata.crm.settings.dao.UserDao;
 import com.mydata.crm.settings.domain.User;
 import com.mydata.crm.settings.service.UserService;
 import com.mydata.crm.utils.DateTimeUtil;
 import com.mydata.crm.utils.UUIDUtil;
+import com.mydata.crm.vo.PaginationVO;
 import com.mydata.crm.workbench.domain.Tran;
 import com.mydata.crm.workbench.service.CustomerService;
 import com.mydata.crm.workbench.service.TranService;
@@ -26,6 +28,21 @@ public class TransactionController {
     private CustomerService customerService;
     @Resource
     private TranService tranService;
+    @RequestMapping(value = "/detail.do")
+    public ModelAndView detail(String id){
+        ModelAndView mv=new ModelAndView();
+
+        return  mv;
+    }
+    @RequestMapping(value = "/pageList.do")
+    @ResponseBody
+    public PaginationVO<Tran> pageList(Tran tran,String pageNo,String pageSize){
+        System.out.println("进入到查询交易信息列表的操作（结合条件查询+分页查询）");
+        PageHelper.startPage(Integer.valueOf(pageNo),Integer.valueOf(pageSize));
+        PaginationVO<Tran> vo=tranService.pageList(tran);
+        System.out.println(vo);
+        return vo;
+    }
     @RequestMapping(value = "/save.do")
     public ModelAndView save(Tran tran, String customerName, HttpServletRequest request){
         tran.setCreateBy(((User)request.getSession().getAttribute("user")).getName());
