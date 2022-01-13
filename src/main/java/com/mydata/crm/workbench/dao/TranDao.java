@@ -15,4 +15,6 @@ public interface TranDao {
     int getTotalByCondition(Tran tran);
 
     Tran detail(@Param("id") String id);
+
+    int changeStage(Tran tran);
 }

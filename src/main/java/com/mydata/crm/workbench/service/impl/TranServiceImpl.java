@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TranServiceImpl implements TranService {
@@ -82,5 +83,30 @@ public class TranServiceImpl implements TranService {
     public Tran detail(String id) {
         Tran tran=tranDao.detail(id);
         return tran;
+    }
+
+    @Override
+    public boolean changeStage(Tran tran) {
+        System.out.println(111);
+        boolean flag=true;
+        int count1=tranDao.changeStage(tran);
+        if (count1!=1){
+            flag=false;
+        }
+        System.out.println(222);
+        TranHistory tranHistory=new TranHistory();
+        tranHistory.setCreateBy(tran.getEditBy());
+        tranHistory.setCreateTime(DateTimeUtil.getSysTime());
+        tranHistory.setId(UUIDUtil.getUUID());
+        tranHistory.setMoney(tran.getMoney());
+        tranHistory.setExpectedDate(tran.getExpectedDate());
+        tranHistory.setStage(tran.getStage());
+        tranHistory.setTranId(tran.getId());
+        int count2=tranHistoryDao.save(tranHistory);
+        if (count2!=1){
+            flag=false;
+        }
+        System.out.println(333);
+        return flag;
     }
 }

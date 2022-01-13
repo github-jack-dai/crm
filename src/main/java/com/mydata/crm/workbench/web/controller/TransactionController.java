@@ -17,7 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/workbench/transaction")
@@ -28,12 +30,29 @@ public class TransactionController {
     private CustomerService customerService;
     @Resource
     private TranService tranService;
+    @RequestMapping(value ="/changeStage.do")
+    @ResponseBody
+    public Map<String,Object> changeStage(Tran tran,HttpServletRequest request){
+        tran.setEditBy(((User)request.getSession().getAttribute("user")).getName());
+        tran.setEditTime(DateTimeUtil.getSysTime());
+        boolean flag=tranService.changeStage(tran);
+        Map<String,String> pMap = (Map<String,String>)request.getServletContext().getAttribute("pMap");
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("success",flag);
+        map.put("t",tran);
+        map.put("possibility",pMap.get(tran.getStage()));
+        return map;
+    }
     @RequestMapping(value = "/detail.do")
-    public ModelAndView detail(String id){
+    public ModelAndView detail(String id,HttpServletRequest request){
         ModelAndView mv=new ModelAndView();
         Tran tran=tranService.detail(id);
         System.out.println(tran);
+        Map<String,String> pMap = (Map<String,String>)request.getServletContext().getAttribute("pMap");
+        String possibility= pMap.get(tran.getStage());
+        //System.out.println(possibility);
         mv.addObject("t",tran);
+        mv.addObject("possibility",possibility);
         mv.setViewName("workbench/transaction/detail");
         return  mv;
     }
