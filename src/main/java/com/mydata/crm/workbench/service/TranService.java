@@ -13,4 +13,6 @@ public interface TranService {
     Tran detail(String id);
 
     boolean changeStage(Tran tran);
+
+    Map<String,Object> getCharts();
 }

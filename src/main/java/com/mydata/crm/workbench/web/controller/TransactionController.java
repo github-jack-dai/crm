@@ -30,6 +30,13 @@ public class TransactionController {
     private CustomerService customerService;
     @Resource
     private TranService tranService;
+    @RequestMapping(value = "/getCharts.do")
+    @ResponseBody
+    public Map<String,Object> getCharts(){
+        System.out.println("进来制作图表了");
+        Map<String,Object> map=tranService.getCharts();
+        return map;
+    }
     @RequestMapping(value ="/changeStage.do")
     @ResponseBody
     public Map<String,Object> changeStage(Tran tran,HttpServletRequest request){

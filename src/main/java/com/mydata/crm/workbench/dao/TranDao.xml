@@ -4,6 +4,12 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mydata.crm.workbench.dao.TranDao">
+    <select id="getCharts" resultType="Map">
+        select count(*) value,stage name from tbl_tran group by stage
+    </select>
+    <select id="getMaxValue" resultType="int">
+        select max(count) from (select count(*) count,stage from tbl_tran group by stage) a
+    </select>
     <update id="changeStage">
         update tbl_tran set stage=#{stage},editBy=#{editBy},editTime=#{editTime}
         where id=#{id}

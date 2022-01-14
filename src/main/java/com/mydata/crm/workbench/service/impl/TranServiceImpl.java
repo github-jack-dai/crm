@@ -13,6 +13,7 @@ import com.mydata.crm.workbench.service.TranService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,5 +109,17 @@ public class TranServiceImpl implements TranService {
         }
         System.out.println(333);
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> getCharts() {
+        Map<String, Object> map=new HashMap<String, Object>();
+        int max=tranDao.getMaxValue();
+        map.put("max",max);
+        System.out.println("只求最大的数目"+max);
+        List<Map<String,String>> dataList=tranDao.getCharts();
+        System.out.println("查出内容"+dataList);
+        map.put("dataList",dataList);
+        return map;
     }
 }

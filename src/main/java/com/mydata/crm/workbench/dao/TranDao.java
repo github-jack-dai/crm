@@ -17,4 +17,8 @@ public interface TranDao {
     Tran detail(@Param("id") String id);
 
     int changeStage(Tran tran);
+
+    int getMaxValue();
+
+    List<Map<String,String>> getCharts();
 }
